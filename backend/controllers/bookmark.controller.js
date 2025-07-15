@@ -37,16 +37,25 @@ const summarize = async (url) => {
   }
 };
 const saveBookmark = async (req, res) => {
-  const { url, tags = [], folder } = req.body; // ✅ make sure 'folder' is read
+  const { url, tags = [], folder } = req.body;
 
   if (!url) {
     return res.status(400).json({ message: 'URL is required' });
   }
 
   try {
+    // Fetch metadata
     const { title, favicon } = await fetchMetadata(url);
-    const summary = await summarize(url);
 
+    // Fetch summary from Jina AI
+    let summary = 'No summary available';
+    try {
+      summary = await getSummary(url);
+    } catch (err) {
+      console.warn('Summary fetch failed:', err.message);
+    }
+
+    // Create bookmark
     const bookmark = new Bookmark({
       user: req.user.id,
       url,
@@ -54,7 +63,7 @@ const saveBookmark = async (req, res) => {
       favicon,
       summary,
       tags,
-      folder: folder || null, // ✅ save folder if provided
+      folder: folder || null,
     });
 
     await bookmark.save();
@@ -64,6 +73,7 @@ const saveBookmark = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 const updateBookmark = async (req, res) => {
   const { id } = req.params;
