@@ -2,7 +2,7 @@ const Bookmark = require('../models/Bookmark');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const JinaAI = require('jinaai');
-
+const getSummary = require('../utils/getSummary');
 const client = new JinaAI({
   method: 'fetch',
 });
