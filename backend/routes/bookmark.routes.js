@@ -6,6 +6,7 @@ const {
   deleteBookmark,
   getBookmarksByFolder,
   updateBookmark, 
+  getUnfolderedBookmarks,
 } = require('../controllers/bookmark.controller');
 
 const authMiddleware = require('../middleware/authMiddleware');
@@ -28,5 +29,6 @@ router.patch('/:id', authMiddleware, updateBookmark);
 // @route   Tag /api/bookmarks/:id
 router.post('/', authMiddleware, validateBookmarkInput, saveBookmark);
 
+router.get('/folderless/all', authMiddleware, getUnfolderedBookmarks);
 
 module.exports = router;

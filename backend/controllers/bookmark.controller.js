@@ -148,10 +148,26 @@ const getBookmarksByFolder = async (req, res) => {
   }
 };
 
+const getUnfolderedBookmarks = async (req, res) => {
+  try {
+    const bookmarks = await Bookmark.find({
+      user: req.user.id,
+      folder: null, // specifically looking for bookmarks without a folder
+    }).sort({ createdAt: -1 });
+
+    res.json(bookmarks);
+  } catch (error) {
+    console.error('Unfoldered bookmarks error:', error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 module.exports = {
   saveBookmark,
   getBookmarks,
   deleteBookmark,
   getBookmarksByFolder,
-  updateBookmark, // ✅ new
+  updateBookmark,
+  getUnfolderedBookmarks, 
 };
