@@ -65,6 +65,37 @@ const saveBookmark = async (req, res) => {
   }
 };
 
+const updateBookmark = async (req, res) => {
+  const { id } = req.params;
+  const { url, tags, folder } = req.body;
+
+  try {
+    const bookmark = await Bookmark.findOne({ _id: id, user: req.user.id });
+    if (!bookmark) {
+      return res.status(404).json({ message: 'Bookmark not found' });
+    }
+
+    // If URL is changed, refetch metadata and summary
+    if (url && url !== bookmark.url) {
+      const { title, favicon } = await fetchMetadata(url);
+      const summary = await getSummary(url);
+
+      bookmark.url = url;
+      bookmark.title = title;
+      bookmark.favicon = favicon;
+      bookmark.summary = summary;
+    }
+
+    if (tags) bookmark.tags = tags;
+    if (folder !== undefined) bookmark.folder = folder || null;
+
+    await bookmark.save();
+    res.json(bookmark);
+  } catch (error) {
+    console.error('Update Bookmark Error:', error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 const getBookmarks = async (req, res) => {
   const tag = req.query.tag;
@@ -117,10 +148,10 @@ const getBookmarksByFolder = async (req, res) => {
   }
 };
 
-
 module.exports = {
   saveBookmark,
   getBookmarks,
   deleteBookmark,
-  getBookmarksByFolder
+  getBookmarksByFolder,
+  updateBookmark, // ✅ new
 };

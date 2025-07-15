@@ -4,7 +4,8 @@ const {
   saveBookmark,
   getBookmarks,
   deleteBookmark,
-  getBookmarksByFolder
+  getBookmarksByFolder,
+  updateBookmark, 
 } = require('../controllers/bookmark.controller');
 
 const authMiddleware = require('../middleware/authMiddleware');
@@ -20,6 +21,8 @@ router.get('/', authMiddleware, getBookmarks);
 router.delete('/:id', authMiddleware, deleteBookmark);
 
 router.get('/folder/:id', authMiddleware, getBookmarksByFolder);
+
+router.patch('/:id', authMiddleware, updateBookmark);
 
 
 // @route   Tag /api/bookmarks/:id
