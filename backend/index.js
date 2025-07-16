@@ -12,7 +12,7 @@ const app = express();
 // ✅ Enable CORS for frontend
 const corsOptions = {
   origin: ['http://localhost:3000', 'https://bookmarkhub-g5os.onrender.com'], // frontend origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // allowed methods
   credentials: true, // allow cookies/auth headers
 };
 
