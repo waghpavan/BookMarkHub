@@ -11,9 +11,9 @@ const app = express();
 // ✅ MIDDLEWARE to parse JSON body (required for POST /login and /register)
 app.use(express.json());
 
-app.use('/api/auth', require('./routes/auth.routes'));
-app.use('/api/bookmarks', require('./routes/bookmark.routes'));
-app.use('/api/folders', folderRoutes);
+app.use('/api/bff/auth', require('./routes/auth.routes'));
+app.use('/api/bff/bookmarks', require('./routes/bookmark.routes'));
+app.use('/api/bff/folders', folderRoutes);
 
 
 const PORT = process.env.PORT || 5000;
